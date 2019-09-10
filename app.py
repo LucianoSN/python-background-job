@@ -8,6 +8,13 @@ from flask_restful import Resource, Api, reqparse
 app = Flask(__name__)
 api = Api(app)
 
+# CONFIG # ******************************************
+
+config_server = 'http://127.0.0.1:5000/'
+
+
+# DATA # ******************************************
+
 data = []
 
 
@@ -22,7 +29,7 @@ def activate_job():
             if len(data) > 0:
                 for item in data:
                     print('EXEC: {}'.format(item))
-                    time.sleep(8)
+                    time.sleep(5)
                     data.remove(item)
 
             time.sleep(1)
@@ -38,7 +45,7 @@ def background_job():
         not_started = True
         while not_started:
             try:
-                r = requests.get('http://127.0.0.1:5000/')
+                r = requests.get(config_server)
                 if r.status_code == 200:
                     not_started = False
             except:
