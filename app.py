@@ -11,7 +11,7 @@ api = Api(app)
 data = []
 
 
-# THREAD # ******************************************
+# TASK # ******************************************
 
 @app.before_first_request
 def activate_job():
@@ -31,12 +31,7 @@ def activate_job():
     thread.start()
 
 
-@app.route("/")
-def running():
-    return "Server is running!"
-
-
-# BOOTSTRAP  # ******************************************
+# BOOTSTRAP THREAD # ******************************************
 
 def background_job():
     def start_loop():
@@ -75,6 +70,11 @@ class ProcessQueue(Resource):
 
 
 # ROUTES # ******************************************
+
+@app.route("/")
+def running():
+    return "Server is running!"
+
 
 api.add_resource(ProcessQueue, '/queue')
 
