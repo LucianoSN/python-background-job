@@ -3,7 +3,7 @@ import uuid
 from flask_restful import Resource, reqparse
 
 
-class ProcessQueue(Resource):
+class UserQueue(Resource):
     def __init__(self, **kwargs):
         self.queue = kwargs['queue']
 
@@ -14,7 +14,7 @@ class ProcessQueue(Resource):
         return {'queues': self.queue}
 
     def post(self):
-        args = ProcessQueue.parser.parse_args()
+        args = UserQueue.parser.parse_args()
 
-        self.queue.append('{} - {}'.format(args['action'], uuid.uuid4()))
+        self.queue.append('[SAVED] - USER: {} - {}'.format(str(args['action']).isupper(), uuid.uuid4()))
         return {'queues': self.queue}
