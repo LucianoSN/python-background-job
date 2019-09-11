@@ -4,6 +4,7 @@ import time
 import requests
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
+from ProcessQueue import ProcessQueue
 
 app = Flask(__name__)
 api = Api(app)
@@ -81,20 +82,20 @@ def background_job():
 # PROCESS QUEUE # ******************************************
 
 
-class ProcessQueue(Resource):
-    parser = reqparse.RequestParser()
-    parser.add_argument('action', type=str, help='Describe action')
-
-    @staticmethod
-    def get():
-        return {'queues': queue}
-
-    @staticmethod
-    def post():
-        args = ProcessQueue.parser.parse_args()
-
-        queue.append('{} - {}'.format(args['action'], uuid.uuid4()))
-        return {'queues': queue}
+# class ProcessQueue(Resource):
+#     parser = reqparse.RequestParser()
+#     parser.add_argument('action', type=str, help='Describe action')
+#
+#     @staticmethod
+#     def get():
+#         return {'queues': queue}
+#
+#     @staticmethod
+#     def post():
+#         args = ProcessQueue.parser.parse_args()
+#
+#         queue.append('{} - {}'.format(args['action'], uuid.uuid4()))
+#         return {'queues': queue}
 
 
 # ROUTES # ******************************************
@@ -104,7 +105,7 @@ def running():
     return "Server is running!"
 
 
-api.add_resource(ProcessQueue, '/queue')
+api.add_resource(ProcessQueue, '/queue', resource_class_kwargs={'queue': queue})
 
 # MAIN # ******************************************
 
