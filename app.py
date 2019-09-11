@@ -60,8 +60,10 @@ def activate_job():
 
             time.sleep(1)
 
-    thread_mail = threading.Thread(name='mail_job', target=run_job, args=(queue_mail, 'mail', 5))
+    thread_mail = threading.Thread(name='mail_job', target=run_job, args=(queue_mail, 'mail', 3))
+    thread_user = threading.Thread(name='user_job', target=run_job, args=(queue_user, 'user', 5))
     thread_mail.start()
+    thread_user.start()
 
 
 # BOOTSTRAP THREAD # ******************************************
@@ -69,7 +71,7 @@ def activate_job():
 def background_job():
     def load_database(database, queue):
         if len(database) > 0:
-            for item in database_mail:
+            for item in database:
                 queue.append(item)
 
     def start_loop():
