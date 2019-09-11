@@ -44,7 +44,7 @@ def activate_job():
             if len(queue_mail) > 0:
                 for item in queue_mail:
                     print('EXEC: {}'.format(item))
-                    time.sleep(5)
+                    time.sleep(3)
                     queue_mail.remove(item)
 
             time.sleep(1)
@@ -55,20 +55,19 @@ def activate_job():
 
 # BOOTSTRAP THREAD # ******************************************
 
-def load_database():
-    if len(database_mail) > 0:
-        for item in database_mail:
-            queue_mail.append(item)
-
-
 def background_job():
+    def load_database(database, queue):
+        if len(database) > 0:
+            for item in database_mail:
+                queue.append(item)
+
     def start_loop():
         not_started = True
         while not_started:
             try:
                 r = requests.get('{}/online'.format(config_server))
                 if r.status_code == 200:
-                    load_database()
+                    load_database(database_mail, queue_mail)
                     not_started = False
             except:
                 print('Waiting server start')
