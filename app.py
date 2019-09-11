@@ -5,6 +5,7 @@ from flask import Flask
 from flask_restful import Api
 
 from MailQueue import MailQueue
+from UserQueue import UserQueue
 
 app = Flask(__name__)
 api = Api(app)
@@ -33,24 +34,34 @@ database_mail = [
 ]
 
 
+# DATA MAIL # ******************************************
+
+queue_user = []
+
+database_user = [
+    '[STORED] - USER - x6849678-b646-4e03-8b14-10da2996ePnh',
+    '[STORED] - USER - yl0423a0-e2a5-4fed-a369-54e111e41gdd',
+]
+
+
 # TASK # ******************************************
 
 @app.before_first_request
 def activate_job():
-    def run_job():
+    def run_job(queue, owner, sec=3):
         while True:
-            print("--- Run recurring task ---")
+            print('--- Run recurring [{}] task ---'.format(owner))
 
-            if len(queue_mail) > 0:
-                for item in queue_mail:
+            if len(queue) > 0:
+                for item in queue:
                     print('EXEC: {}'.format(item))
-                    time.sleep(3)
-                    queue_mail.remove(item)
+                    time.sleep(sec)
+                    queue.remove(item)
 
             time.sleep(1)
 
-    thread = threading.Thread(target=run_job)
-    thread.start()
+    thread_mail = threading.Thread(name='mail_job', target=run_job, args=(queue_mail, 'mail', 5))
+    thread_mail.start()
 
 
 # BOOTSTRAP THREAD # ******************************************
@@ -68,6 +79,7 @@ def background_job():
                 r = requests.get('{}/online'.format(config_server))
                 if r.status_code == 200:
                     load_database(database_mail, queue_mail)
+                    load_database(database_user, queue_user)
                     not_started = False
             except:
                 print('Waiting server start')
@@ -86,6 +98,7 @@ def running():
 
 
 api.add_resource(MailQueue, '/mail/queue', resource_class_kwargs={'queue': queue_mail})
+api.add_resource(UserQueue, '/user/queue', resource_class_kwargs={'queue': queue_user})
 
 # MAIN # ******************************************
 
