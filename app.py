@@ -1,9 +1,8 @@
-import uuid
 import threading
 import time
 import requests
 from flask import Flask
-from flask_restful import Resource, Api, reqparse
+from flask_restful import Api
 from ProcessQueue import ProcessQueue
 
 app = Flask(__name__)
