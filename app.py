@@ -79,25 +79,6 @@ def background_job():
     thread.start()
 
 
-# PROCESS QUEUE # ******************************************
-
-
-# class ProcessQueue(Resource):
-#     parser = reqparse.RequestParser()
-#     parser.add_argument('action', type=str, help='Describe action')
-#
-#     @staticmethod
-#     def get():
-#         return {'queues': queue}
-#
-#     @staticmethod
-#     def post():
-#         args = ProcessQueue.parser.parse_args()
-#
-#         queue.append('{} - {}'.format(args['action'], uuid.uuid4()))
-#         return {'queues': queue}
-
-
 # ROUTES # ******************************************
 
 @app.route("/online")
