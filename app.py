@@ -10,7 +10,7 @@ api = Api(app)
 
 # CONFIG # ******************************************
 
-config_server = 'http://127.0.0.1:5000/'
+config_server = 'http://127.0.0.1:5000'
 
 
 # DATA # ******************************************
@@ -54,16 +54,20 @@ def activate_job():
 
 # BOOTSTRAP THREAD # ******************************************
 
+def load_database():
+    if len(database) > 0:
+        for item in database:
+            queue.append(item)
+
+
 def background_job():
     def start_loop():
         not_started = True
         while not_started:
             try:
-                r = requests.get(config_server)
+                r = requests.get('{}/online'.format(config_server))
                 if r.status_code == 200:
-                    if len(database) > 0:
-                        for item in database:
-                            queue.append(item)
+                    load_database()
                     not_started = False
             except:
                 print('Waiting server start')
@@ -95,7 +99,7 @@ class ProcessQueue(Resource):
 
 # ROUTES # ******************************************
 
-@app.route("/")
+@app.route("/online")
 def running():
     return "Server is running!"
 
