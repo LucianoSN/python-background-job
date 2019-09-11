@@ -16,5 +16,5 @@ class MailQueue(Resource):
     def post(self):
         args = MailQueue.parser.parse_args()
 
-        self.queue.append('[SAVED] - MAIL: {} - {}'.format(str(args['action']).isupper(), uuid.uuid4()))
+        self.queue.append('[SAVED] - MAIL: {} - {}'.format(args['action'], uuid.uuid4()))
         return {'queues': self.queue}

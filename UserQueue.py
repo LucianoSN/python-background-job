@@ -16,5 +16,5 @@ class UserQueue(Resource):
     def post(self):
         args = UserQueue.parser.parse_args()
 
-        self.queue.append('[SAVED] - USER: {} - {}'.format(str(args['action']).isupper(), uuid.uuid4()))
+        self.queue.append('[SAVED] - USER: {} - {}'.format(args['action'], uuid.uuid4()))
         return {'queues': self.queue}
